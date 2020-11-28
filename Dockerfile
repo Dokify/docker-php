@@ -1,4 +1,4 @@
-FROM php:7.4.11-fpm-alpine
+FROM php:7.4-fpm-alpine
 
 RUN apk --update upgrade \
     && apk add --no-cache autoconf automake make gcc g++ icu-dev rabbitmq-c rabbitmq-c-dev \
@@ -15,7 +15,6 @@ RUN apk --update upgrade \
     && docker-php-ext-enable \
         amqp \
         apcu \
-        opcache \
-        xdebug
+        opcache
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
