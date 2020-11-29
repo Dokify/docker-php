@@ -29,4 +29,4 @@ EXPOSE 80
 
 STOPSIGNAL SIGQUIT
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD php-fpm -D; nginx -g "daemon off;"
