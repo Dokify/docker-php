@@ -5,7 +5,6 @@ RUN apt update -yq \
     apt-transport-https \
     ca-certificates \
     gnupg2 \
-    nginx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pecl install \
