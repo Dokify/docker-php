@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.2-fpm-alpine
 
 RUN apk --update upgrade \
     && apk add --no-cache autoconf automake make gcc g++ icu-dev rabbitmq-c rabbitmq-c-dev \
