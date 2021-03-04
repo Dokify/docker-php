@@ -12,6 +12,7 @@ RUN apk --update upgrade \
         intl \
         pdo_mysql \
         sockets \
+	pcntl \
     && docker-php-ext-enable \
         amqp \
         apcu \
