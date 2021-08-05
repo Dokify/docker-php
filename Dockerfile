@@ -21,8 +21,7 @@ RUN apk --update upgrade \
 	pcntl \
     && docker-php-ext-enable \
         apcu \
-        opcache \
-        xdebug
+        opcache
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
 COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
