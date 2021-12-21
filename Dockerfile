@@ -8,7 +8,7 @@ RUN apk add --no-cache rabbitmq-c-dev && \
 FROM php:8.0.6-fpm-alpine
 
 RUN apk --update upgrade \
-    && apk add --no-cache autoconf automake make gcc g++ icu-dev rabbitmq-c \
+    && apk add --no-cache autoconf automake make gcc g++ icu-dev rabbitmq-c gnu-libiconv  \
     && pecl install \
         apcu \
         xdebug \
@@ -22,6 +22,10 @@ RUN apk --update upgrade \
     && docker-php-ext-enable \
         apcu \
         opcache
+
+# https://github.com/docker-library/php/issues/1121
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
 COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
