@@ -22,9 +22,10 @@ ENV PHPIZE_DEPS \
     icu-dev \
     openssl-dev \
     gettext-dev \
-    rabbitmq-c-dev
+    rabbitmq-c-dev \
+    gearman-dev
 
-RUN apk add --no-cache --virtual .persistent-deps \
+RUN apk add --no-cache --virtual .persistent-deps  -X 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
     # for intl extension
     icu-libs \
     # for mongodb
@@ -43,15 +44,17 @@ RUN apk add --no-cache --virtual .persistent-deps \
     # for mbstring
     oniguruma-dev \
     libgcrypt \
+    gearman-libs \
     rabbitmq-c && \
-    apk add --no-cache --virtual .build-deps \
+    apk add --update --no-cache --virtual .build-deps -X 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
       $PHPIZE_DEPS && \
     pecl install amqp \
         apcu \
         xdebug \
         mongodb \
+        gearman \
         redis && \
-    docker-php-ext-enable amqp apcu mongodb redis && \
+    docker-php-ext-enable amqp apcu mongodb redis gearman && \
     docker-php-ext-install -j$(nproc) \
         bcmath \
         opcache \
