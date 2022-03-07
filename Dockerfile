@@ -23,7 +23,9 @@ ENV PHPIZE_DEPS \
     openssl-dev \
     gettext-dev \
     rabbitmq-c-dev \
-    gearman-dev
+    gearman-dev \
+    patch \
+    libtool
 
 RUN apk add --no-cache --virtual .persistent-deps  -X 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
     # for intl extension
@@ -81,11 +83,23 @@ RUN apk add --no-cache --virtual .persistent-deps  -X 'http://dl-cdn.alpinelinux
     php7-xml \
     php7-pecl-xdebug \
     php7-imap \
-    php7-redis && \
-    apk del .build-deps && \
-    rm -rf /var/cache/apk/*
+    php7-redis \
+    && rm /usr/bin/iconv \
+    && cd /tmp \
+    && curl -SL http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz | tar -xz -C . \
+    && cd libiconv-1.14 \
+    && ./configure --prefix=/usr/local \
+    && curl -SL https://raw.githubusercontent.com/mxe/mxe/7e231efd245996b886b501dad780761205ecf376/src/libiconv-1-fixes.patch \
+    | patch -p1 -u  \
+    && make \
+    && make install \
+    && libtool --finish /usr/local/lib \
+    && cd .. \
+    && rm -rf libiconv-1.14 \
+    && cd / && rm -rf /tmp/* \
+    && apk del .build-deps \
+    && rm -rf /var/cache/apk/*
 
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+ENV LD_PRELOAD /usr/local/lib/preloadable_libiconv.so
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
