@@ -85,4 +85,7 @@ RUN apk add --no-cache --virtual .persistent-deps  -X 'http://dl-cdn.alpinelinux
     apk del .build-deps && \
     rm -rf /var/cache/apk/*
 
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 COPY php.custom.ini /usr/local/etc/php/conf.d
