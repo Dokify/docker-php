@@ -55,8 +55,10 @@ RUN apk add --no-cache --virtual .persistent-deps  -X 'http://dl-cdn.alpinelinux
         xdebug \
         mongodb \
         gearman \
+        apcu_bc \
         redis && \
     docker-php-ext-enable amqp apcu mongodb redis gearman && \
+    echo "extension=apc" >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     docker-php-ext-install -j$(nproc) \
         bcmath \
         opcache \
