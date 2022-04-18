@@ -1,4 +1,4 @@
-ARG PHPVERSION=7.2
+ARG PHPVERSION=8.0
 FROM webdevops/php:${PHPVERSION}
 
 ARG PHPVERSION
@@ -23,10 +23,9 @@ RUN apt update && apt install -yq --no-install-recommends \
     pecl install \
     xdebug \
     gearman \
-    apcu_bc && \
-    docker-php-ext-configure zip --with-libzip=/usr/include && \
+    apcu && \
+    docker-php-ext-configure zip && \
     docker-php-ext-enable gearman && \
-    echo "extension=apc" >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     docker-php-ext-install -j$(nproc) \
         bcmath \
         opcache \
