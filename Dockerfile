@@ -12,6 +12,7 @@ RUN apk --update upgrade \
     && pecl install \
         apcu \
         xdebug \
+        redis \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
         opcache \
