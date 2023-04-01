@@ -6,6 +6,14 @@ FROM dokify/php:8.2.4-fpm-alpine-ext-amqp AS ext-amqp
 #    curl -fsSL https://pecl.php.net/get/amqp | tar xvz -C "/usr/src/php/ext/amqp" --strip 1 && \
 #    docker-php-ext-install amqp
 
+FROM dokify/php:8.2.4-fpm-alpine-ext-swoole AS ext-swoole
+#FROM php:8.2.4-fpm-alpine AS ext-swoole
+#RUN apk --update upgrade \
+#    && apk add --no-cache autoconf automake make gcc g++ gnu-libiconv linux-headers openssl-dev  \
+#    && apk add --no-cache --repository="http://dl-cdn.alpinelinux.org/alpine/edge/community" php82-sockets php82-dev \
+#    && pecl install openswoole-22.0.0 --with-php-config=/usr/bin/php-config82 --with-libdir=/usr/include/php82/ext/sockets/ \
+#    && rm -rf /tmp/pear
+
 FROM dokify/php:8.2.4-fpm-alpine-ext-build AS ext-build
 #FROM php:8.2.4-fpm-alpine AS ext-build
 
@@ -31,7 +39,8 @@ FROM dokify/php:8.2.4-fpm-alpine-ext-build AS ext-build
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
 COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
-COPY --from=ext-amqp /usr/local/lib/php/extensions/no-debug-non-zts-20220829/amqp.so /usr/local/lib/php/extensions/no-debug-non-zts-20200930/amqp.so
+COPY --from=ext-amqp /usr/local/lib/php/extensions/no-debug-non-zts-20220829/amqp.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/amqp.so
+COPY --from=ext-swoole /usr/local/lib/php/extensions/no-debug-non-zts-20220829/openswoole.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/openswoole.so
 
 FROM php:8.2.4-fpm-alpine
 
