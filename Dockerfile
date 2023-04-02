@@ -14,6 +14,13 @@ FROM dokify/php:8.2.4-fpm-alpine-ext-swoole AS ext-swoole
 #    && pecl install openswoole-22.0.0 --with-php-config=/usr/bin/php-config82 --with-libdir=/usr/include/php82/ext/sockets/ \
 #    && rm -rf /tmp/pear
 
+FROM dokify/php:8.2.4-fpm-alpine-ext-grpc AS ext-grpc
+#FROM php:8.2.4-fpm-alpine AS ext-grpc
+#RUN apk --update upgrade \
+#    && apk add --no-cache autoconf automake make gcc g++ linux-headers zlib-dev \
+#    && pecl install grpc \
+#    && rm -rf /tmp/pear
+
 FROM dokify/php:8.2.4-fpm-alpine-ext-build AS ext-build
 #FROM php:8.2.4-fpm-alpine AS ext-build
 
