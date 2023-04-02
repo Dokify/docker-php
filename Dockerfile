@@ -24,6 +24,7 @@ FROM dokify/php:8.2.4-fpm-alpine-ext-build AS ext-build
 #        xdebug \
 #        igbinary \
 #        redis \
+#        protobuf-3.22.1 \
 #    && docker-php-ext-install -j$(nproc) \
 #        bcmath \
 #        opcache \
