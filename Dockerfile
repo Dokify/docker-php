@@ -23,9 +23,10 @@ RUN apt update && apt install -yq --no-install-recommends \
     pecl install \
     xdebug \
     gearman \
+    igbinary \
     apcu && \
     docker-php-ext-configure zip && \
-    docker-php-ext-enable gearman && \
+    docker-php-ext-enable gearman igbinary && \
     docker-php-ext-install -j$(nproc) \
         bcmath \
         opcache \
@@ -39,9 +40,19 @@ RUN apt update && apt install -yq --no-install-recommends \
         xsl \
         zip \
         gettext && \
+    pecl uninstall redis && \
+    cd /tmp && curl -LO https://pecl.php.net/get/redis \
+    && tar xvzf redis \
+    && ( \
+        cd redis-5.3.7 \
+        && phpize \
+        && ./configure --enable-redis-igbinary \
+        && make && make install \
+    ) && \
     apt-get -y clean && \
     apt-get clean autoclean && \
     apt-get autoremove --yes && \
+    rm -rf /tmp/redis* && \
     rm -rf /var/lib/{apt,dpkg,cache,log}
 
 COPY php.custom.ini /usr/local/etc/php/conf.d
